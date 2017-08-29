@@ -14,7 +14,7 @@ TLS is not set.
 
 1. Run `go get <name of your repository>`
 
-1. Ensure that the `peer0.org1.example.com` in the `[docker-compose.yaml](./docker-compose.yaml)` network setting matches the name of your root directory.
+1. Ensure that the `peer0.org1.example.com` in the [docker-compose.yaml](./docker-compose.yaml) network setting matches the name of your root directory.
 
     For example, if the root directory is call `fabric-tiny` set this variable accordingly:
 
@@ -35,5 +35,8 @@ TLS is not set.
     ```
 
 <hr>
+
 To use this in the context of fabric chaincode development, please follow the recommended approach for Go projects (see [Go code organisation](https://golang.org/doc/code.html#Organization))  
+
 <hr>
+ 
