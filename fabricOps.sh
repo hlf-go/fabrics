@@ -31,13 +31,9 @@ function pullDockerImages(){
 
 function generateCerts(){
 
-    CRYPTOGEN=$FABRIC_ROOT/release/$OS_ARCH/bin/cryptogen
-    if [ -f "$CRYPTOGEN" ]; then
-            echo "Using cryptogen -> $CRYPTOGEN"
-	else
-	    echo "Building cryptogen"
-	    make -C $FABRIC_ROOT release
-	fi 
+    if [ ! -f $GOPATH/bin/cryptogen ]; then
+        go get github.com/hyperledger/fabric/common/tools/cryptogen
+    fi
     
     echo
 	echo "##########################################################"
@@ -47,7 +43,7 @@ function generateCerts(){
 		rm -rf ./crypto-config
 	fi
 
-    $CRYPTOGEN generate --config=./crypto-config.yaml
+    $GOPATH/bin/cryptogen generate --config=./crypto-config.yaml
     echo
 }
 
@@ -58,26 +54,22 @@ function generateChannelArtifacts(){
 		mkdir channel-artifacts
 	fi
 
-	CONFIGTXGEN=$FABRIC_ROOT/release/$OS_ARCH/bin/configtxgen
-	if [ -f "$CONFIGTXGEN" ]; then
-            echo "Using configtxgen -> $CONFIGTXGEN"
-	else
-	    echo "Building configtxgen"
-	    make -C $FABRIC_ROOT release
-	fi
+	if [ ! -f $GOPATH/bin/configtxgen ]; then
+        go get github.com/hyperledger/fabric/common/configtx/tool/configtxgen
+    fi
 
     echo
 	echo "#################################################################"
 	echo "### Generating channel configuration transaction 'channel.tx' ###"
 	echo "#################################################################"
 
-    $CONFIGTXGEN -profile MyOrgsOrdererGenesis -outputBlock ./channel-artifacts/genesis.block
+    $GOPATH/bin/configtxgen -profile MyOrgsOrdererGenesis -outputBlock ./channel-artifacts/genesis.block
 
     echo
 	echo "#################################################################"
 	echo "#######    Generating anchor peer update for Org1MSP   ##########"
 	echo "#################################################################"
-    $CONFIGTXGEN -profile MyOrgsChannel -outputCreateChannelTx ./channel-artifacts/channel.tx -channelID "mychannel"
+    $GOPATH/bin/configtxgen -profile MyOrgsChannel -outputCreateChannelTx ./channel-artifacts/channel.tx -channelID "mychannel"
 
 }
 
@@ -107,9 +99,6 @@ function cleanNetwork() {
     if [ -d ./tools ]; then
             rm -rf ./tools
     fi
-
-    cd $GOPATH/src/github.com/hyperledger/fabric
-    make clean
 
     # This operations removes all docker containers and images regardless
     #
