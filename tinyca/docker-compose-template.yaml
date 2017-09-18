@@ -2,7 +2,7 @@ version: '3'
 
 services:
   
-  ca0:
+  ca_peerOrg1:
     image: hyperledger/fabric-ca
     container_name: ca_peerOrg1
     environment:
@@ -36,7 +36,7 @@ services:
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
     command: orderer
     ports:
-      - 7050:7050
+      - 7050:7505
     volumes:
       - ./channel-artifacts:/etc/hyperledger/configtx
       - ./crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/msp:/var/hyperledger/orderer/msp
@@ -48,7 +48,7 @@ services:
     # Comment/Uncomment the port mapping if you want to hide/expose the CouchDB service,
     # for example map it to utilize Fauxton User Interface in dev environments.
     ports:
-      - "7984:5984"
+      - 7984:5984
     depends_on:
       - peer0.org1.example.com
 
