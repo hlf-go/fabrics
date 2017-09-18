@@ -5,8 +5,9 @@ A collection of scripts to help you create a fabric network comprising:
 * One peer attached to couchDB
 * One orderer
 * One cli
+* One CA
 
-TLS is not set.
+TLS is set by default.
 
 # How to use this network
 
