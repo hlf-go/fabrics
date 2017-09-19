@@ -57,7 +57,7 @@ This network is intended for educational purpose only.
     * Instantiate chaincode
     * Invoke chaincode
 
-    Each script provides a single operations. These are intended to help you appreciate what is involved the basic chaincode operations and quick way of verifying that the network has been setup accordingly. Feel free to replace it with your version.
+    Each script execute a single operation. These are intended to help you appreciate what is involved the basic chaincode operations and quick way of verifying that the network has been setup accordingly. Feel free to replace it with your version.
 
 1. In the `cli` container map the volume containing the chaincode you wish to inspect. For example, if you have your chaincode in `$GOPATH/src/github.com/hlf-go/example-chaincodes`, ensure that it is set accordingly in the volume section of `cli` container as follows:
 
