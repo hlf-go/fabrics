@@ -12,7 +12,7 @@ A collection of predefined scripts to help you spin up fabric networks.
 
 Clone or fork this repo. Modify the script to meet your needs.
 
-To used these scripts to your best advantage, it is recommended that you follow the [Go way of organising your project](https://golang.org/doc/code.html#Organization). All you need to do is to run the command `go get github.com/hlf-go/fabric` to download it to the your Go workspace:
+To used these scripts to your best advantage, it is recommended that you organise all your projects (Go and non-Go ones) around [Go workspace](https://golang.org/doc/code.html#Organization). All you need to do is to run the command `go get github.com/hlf-go/fabric` to download it to the your Go workspace:
 
 ```
 $GOPATH/src/
