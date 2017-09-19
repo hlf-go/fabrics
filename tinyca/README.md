@@ -41,7 +41,7 @@ This network is intended for educational purpose only.
 
     The function replaces the keyword `CA1_PRIVATE_KEY` found in the template with the key found the name of the private key found `./crypto-config` folder.
 
-1. The docker-compose script assumes that we are using bridge network mode `peer0.org1.example.com` in the [docker-compose-template.yaml](./docker-compose-template.yaml). Please ensure that `CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE` matches your root directory name accordingly.
+1. The docker-compose script assumes that we are using bridge network mode. In the [docker-compose-template.yaml](./docker-compose-template.yaml). Please ensure that `CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE` for `peer0.org1.example.com` matches your root directory name accordingly.
 
     In this particular case, the root directory is call `tinyca` set this variable accordingly:
 
