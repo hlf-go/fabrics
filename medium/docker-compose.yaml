@@ -55,6 +55,32 @@ services:
         - /var/run/:/host/var/run/
         - ./crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/:/etc/hyperledger/crypto/peer
 
+  peer0.org1.cli:
+    container_name: peer0.org1.cli
+    image: hyperledger/fabric-tools
+    tty: true
+    environment:
+      # Go tooling
+      - GOPATH=/opt/gopath
+      # Base configuration
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=fabricmedium_default
+      - CORE_LOGGING_LEVEL=DEBUG
+      - CORE_CHAINCODE_LOGGING_LEVEL=DEBUG
+      # cli peer specific setting
+      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp
+      - CORE_PEER_ID=peer0.org1.cli
+      - CORE_PEER_ADDRESS=peer0.org1.example.com:7051
+      - CORE_PEER_LOCALMSPID=Org1MSP
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    volumes:
+      - /var/run/:/host/var/run/
+      - ./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
+      - ./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
+      - ./scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts
+      - $GOPATH/src/github.com/hlf-go/example-chaincodes:/opt/gopath/src/github.com/hyperledger/fabric/examples/chaincode/go
+
+
   couchdb0.org2:
     container_name: couchdb0.org2
     image: hyperledger/fabric-couchdb
@@ -90,8 +116,8 @@ services:
         - /var/run/:/host/var/run/
         - ./crypto-config/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/:/etc/hyperledger/crypto/peer
 
-  cli:
-    container_name: cli
+  peer0.org2.cli:
+    container_name: peer0.org2.cli
     image: hyperledger/fabric-tools
     tty: true
     environment:
@@ -104,8 +130,8 @@ services:
       - CORE_CHAINCODE_LOGGING_LEVEL=DEBUG
       # cli peer specific setting
       - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp
-      - CORE_PEER_ID=cli
-      - CORE_PEER_ADDRESS=peer0.org1.example.com:7051
+      - CORE_PEER_ID=peer0.org2.cli
+      - CORE_PEER_ADDRESS=peer0.org2.example.com:7051
       - CORE_PEER_LOCALMSPID=Org1MSP
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     volumes:
