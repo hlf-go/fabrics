@@ -7,17 +7,18 @@ PROJECT_DIR=$PWD
 ARGS_NUMBER="$#"
 COMMAND="$1"
 
+usage_message="Useage: $0 start | status | clean | cli | pee"
+
 function verifyArg() {
 
     if [ $ARGS_NUMBER -ne 1 ]; then
-        echo "Useage: networkOps.sh start | status | clean | cli | peer"
+        echo $usage_message
         exit 1;
     fi
 }
 
 OS_ARCH=$(echo "$(uname -s|tr '[:upper:]' '[:lower:]'|sed 's/mingw64_nt.*/windows/')-$(uname -m | sed 's/x86_64/amd64/g')" | awk '{print tolower($0)}')
 FABRIC_ROOT=$GOPATH/src/github.com/hyperledger/fabric
-
 
 function pullDockerImages(){
   local FABRIC_TAG="x86_64-1.0.0"
@@ -140,7 +141,7 @@ case $COMMAND in
         dockerCli
         ;;
     *)
-        echo "Useage: networkOps.sh start | status | clean | cli "
+        echo $usage_message
         exit 1;
 esac
 
