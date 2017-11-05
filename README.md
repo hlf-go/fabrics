@@ -3,7 +3,7 @@
 In this repository you will find a collection of predefined scripts to help you spin up fabric networks (locally or on the cloud) for educational purposes. The scripts have been intentionally kept as minimal as possible to ensure that it is easy to be understood by user and maintainable.
 
 * [tiny](./tiny) - Scripts to create a network with 1 x orderer, 1 x org ( 1 x peer with couchDB)  and 1 x cli. No TLS.
-* [tinyca](./tinyca) -  Scripts to create 1 x fabric-ca-server and 1 x fabric-ca-client wrapper, with the option to enable or not enable tls.
+* [tinyca](./tinyca) -  Scripts using Fabric CA to create MSP and mount on 1 x orderer and 1 x peer without the use of cryptogen.
 * [medium](./medium) - Scripts to create a network with 1 x orderer, 2 x orgs ( 1 x peer with couchDB per org) and 1 x cli. TLS not enabled.
 
 This list is not exhaustive and more will be added.
