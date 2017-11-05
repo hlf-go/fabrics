@@ -4,24 +4,13 @@ args_number="$#"
 command="$1"
 option="$2"
 
-usage_message="Usage: $0 start [--tls]  | reset"
+usage_message="Usage: $0 start [--tls]  | reset | cli"
 
 function verifyArg() {
 
     if [ $args_number -lt 1 ] || [ $args_number -gt 2 ]; then
         echo $usage_message
         exit 1;
-    fi
-}
-
-function createDir(){
-
-    if [ ! -d fabric-ca-client-home ]; then
-        mkdir ./fabric-ca-client-home
-    fi
-
-    if [ ! -d ./fabric-ca-server ]; then
-        mkdir ./fabric-ca-server
     fi
 }
 
@@ -57,14 +46,16 @@ function startServer(){
     esac
 }
 
-
+function cli(){
+    docker exec -it ca-client /bin/bash
+}
 function cleanDocker(){
     docker rm -f $(docker ps -aq)
     docker rmi -f $(docker images -q)
 }
 
 function cleanDir(){
-    rm -rf fabric-ca-client-home/
+    rm -rf fabric-ca-client/
     rm -rf fabric-ca-server/
 }
 
@@ -87,6 +78,9 @@ case $command in
         ;;
     "reset")
         resetServer $option
+        ;;
+    "cli")
+        cli
         ;;
     *)
         echo $usage_message
