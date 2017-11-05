@@ -3,9 +3,8 @@
 In this repository you will find a collection of predefined scripts to help you spin up fabric networks (locally or on the cloud) for educational purposes. The scripts have been intentionally kept as minimal as possible to ensure that it is easy to be understood by user and maintainable.
 
 * [tiny](./tiny) - Scripts to create a network with 1 x orderer, 1 x org ( 1 x peer with couchDB)  and 1 x cli. No TLS.
-* [tinyca](./tinyca) - Scripts to create a network with 1 x CA, 1 x orderer, 1 x org ( 1 x peer with couchDB) and 1 x cli, TLS enabled.
+* [tinyca](./tinyca) -  Scripts to create 1 x fabric-ca-server and 1 x fabric-ca-client wrapper, with the option to enable or not enable tls.
 * [medium](./medium) - Scripts to create a network with 1 x orderer, 2 x orgs ( 1 x peer with couchDB per org) and 1 x cli. TLS not enabled.
-* [e2e](./e2e) - Temporary copy of hyperledger fabric e2e example. The plan is to replaced this with a version capable of spanning multiple nodes (e.g. macs, VMs, etc) to mimic multiple organisations across physical nodes.
 
 This list is not exhaustive and more will be added.
 
@@ -20,8 +19,6 @@ Modify the script to meet your needs as there is no intention extend the scripts
 <hr>
 
 # How to use these scripts
-
-
 
 To used these scripts to your best advantage, it is recommended that you organise all your projects (Go and non-Go ones) around [Go workspace](https://golang.org/doc/code.html#Organization). All you need to do is to run the command `go get github.com/hlf-go/fabric` to download it to the your Go workspace:
 
