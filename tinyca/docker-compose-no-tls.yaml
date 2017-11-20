@@ -16,7 +16,8 @@ services:
   
   ca-client:
     container_name: ca-client
-    image: paul-sitoh/fabric-ca-testkit
+    build:
+      context: ./ca-client-wrapper
     tty: true
     environment:
       - FABRIC_CA_CLIENT_HOME=/opt/wd/fabric-ca-client
