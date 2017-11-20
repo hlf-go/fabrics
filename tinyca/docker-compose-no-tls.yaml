@@ -18,6 +18,7 @@ services:
     container_name: ca-client
     build:
       context: ./ca-client-wrapper
+    image: paul-sitoh/fabric-ca-client
     tty: true
     environment:
       - FABRIC_CA_CLIENT_HOME=/opt/wd/fabric-ca-client

@@ -14,10 +14,6 @@ function verifyArg() {
     fi
 }
 
-function buildCliTool(){
-    docker build -t paul-sitoh/fabric-ca-testkit ./ca-client-wrapper/
-}
-
 function startServerTLS(){
     echo "Currently not available ....."
 }
@@ -29,7 +25,6 @@ function startServerNoTLS(){
 function startServer(){
     tls_arg="$1"
 
-    buildCliTool
     case $tls_arg in
         "")
           echo "Starting server without tls ...."
