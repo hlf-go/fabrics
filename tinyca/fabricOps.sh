@@ -2,9 +2,10 @@
 
 args_number="$#"
 command="$1"
-option="$2"
 
-usage_message="Usage: $0 start [--tls]  | reset | cli"
+usage_message="Usage: $0 start | reset | cli"
+
+crypto_assets="crypto-config"
 
 function verifyArg() {
 
@@ -14,31 +15,39 @@ function verifyArg() {
     fi
 }
 
-function startServerTLS(){
-    echo "Currently not available ....."
+function removeFabricAssets(){
+    rm -rf $crypto_assets
+    rm docker-compose.yamlt
 }
 
-function startServerNoTLS(){
-    docker-compose -f docker-compose-no-tls.yaml up -d
+function generateFabricAssets(){
+    removeFabricAssets
+    $GOPATH/bin/cryptogen generate --config=./crypto-config.yaml
+}
+
+function replacePrivateKey() {
+
+    echo # Replace key
+
+	ARCH=`uname -s | grep Darwin`
+	if [ "$ARCH" == "Darwin" ]; then
+		OPTS="-it"
+	else
+		OPTS="-i"
+	fi
+
+	cp docker-compose.yaml.template docker-compose.yaml
+
+    CURRENT_DIR=$PWD
+    cd $crypto_assets/peerOrganizations/org1.example.com/ca/
+    PRIV_KEY=$(ls *_sk)
+    cd $CURRENT_DIR
+    sed $OPTS "s/CA_PRIVATE_KEY/${PRIV_KEY}/g" docker-compose.yaml
 }
 
 function startServer(){
-    tls_arg="$1"
-
-    case $tls_arg in
-        "")
-          echo "Starting server without tls ...."
-          startServerNoTLS
-          ;;
-        "--tls")
-          echo "Starting server with tls ..."
-          startServerTLS
-          ;;
-        *)
-          echo $usage_message
-          exit 1;
-          ;;
-    esac
+    replacePrivateKey
+    docker-compose -f docker-compose.yaml up -d
 }
 
 function cli(){
@@ -50,17 +59,12 @@ function cleanDocker(){
 }
 
 function cleanDir(){
+    removeFabricAssets
     rm -rf fabric-ca-client/
     rm -rf fabric-ca-server/
 }
 
 function resetServer(){
-    option=$1
-
-    if [ "$option" != "" ]; then
-        echo "Ignoring argument $option."
-        echo "Defaulting to Usage: $0 reset"
-    fi
     cleanDocker
     cleanDir
 }
@@ -69,10 +73,11 @@ function resetServer(){
 verifyArg
 case $command in
     "start")
-        startServer $option
+        generateFabricAssets
+        startServer
         ;;
     "reset")
-        resetServer $option
+        resetServer
         ;;
     "cli")
         cli
