@@ -18,6 +18,7 @@ function verifyArg() {
 function removeFabricAssets(){
     rm -rf $crypto_assets
     rm docker-compose.yamlt
+    rm docker-compose.yaml
 }
 
 function generateFabricAssets(){
