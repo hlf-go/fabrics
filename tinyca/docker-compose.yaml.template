@@ -17,7 +17,7 @@ services:
     working_dir: /etc/hyperledger/fabric-ca-server
     volumes:
       - ./fabric-ca-server:/etc/hyperledger/fabric-ca-server
-      - ./crypto/peerOrganizations/org1.example.com/ca/:/etc/hyperledger/fabric-ca-server-config
+      - ./crypto-config/peerOrganizations/org1.example.com/ca/:/etc/hyperledger/fabric-ca-server-config
   
   ca-client:
     container_name: ca-client
