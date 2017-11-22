@@ -53,6 +53,10 @@ function replacePrivateKey() {
     PRIV_KEY=$(ls *_sk)
     cd $CURRENT_DIR
     sed $OPTS "s/CA_PRIVATE_KEY/${PRIV_KEY}/g" docker-compose.yaml
+    cd $crypto_assets/peerOrganizations/org1.example.com/tlsca/
+    PRIV_KEY=$(ls *_sk)
+    cd $CURRENT_DIR
+    sed $OPTS "s/CA_TLS_KEY/${PRIV_KEY}/g" docker-compose.yaml
 }
 
 function startServer(){
