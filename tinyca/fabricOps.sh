@@ -6,6 +6,7 @@ command="$1"
 usage_message="Usage: $0 start | reset | cli"
 
 crypto_assets="crypto-config"
+channel_assets="channel-artifacts"
 
 function verifyArg() {
 
@@ -21,6 +22,10 @@ function removeFabricAssets(){
         rm -rf $crypto_assets
     fi
 
+    if [ -d $channel_assets ]; then
+        rm -rf $channel_assets
+    fi
+
     if [ -f docker-compose.yamlt ]; then
         rm docker-compose.yamlt
     fi
@@ -32,7 +37,21 @@ function removeFabricAssets(){
 
 function generateFabricAssets(){
     removeFabricAssets
+
+    if [ ! -f $GOPATH/bin/cryptogen ]; then
+        go get github.com/hyperledger/fabric/common/tools/cryptogen
+    fi
     $GOPATH/bin/cryptogen generate --config=./crypto-config.yaml
+
+    if [ ! -d ./channel-artifacts ]; then
+		mkdir channel-artifacts
+	fi
+	if [ ! -f $GOPATH/bin/configtxgen ]; then
+        go get github.com/hyperledger/fabric/common/configtx/tool/configtxgen
+    fi  
+    $GOPATH/bin/configtxgen -profile MyOrgsOrdererGenesis -outputBlock ./channel-artifacts/genesis.block
+
+    $GOPATH/bin/configtxgen -profile MyOrgsChannel -outputCreateChannelTx ./channel-artifacts/channel.tx -channelID "mychannel"
 }
 
 function replacePrivateKey() {
