@@ -86,8 +86,8 @@ services:
       - 7051:7051
       - 7053:7053
     volumes:
-        - /var/run/:/host/var/run/
-        - ./crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/:/etc/hyperledger/crypto/peer
+      - /var/run/:/host/var/run/
+      - ./crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/:/etc/hyperledger/crypto/peer
 
   peer-cli:
     container_name: peer-cli
@@ -102,7 +102,7 @@ services:
       - CORE_LOGGING_LEVEL=DEBUG
       - CORE_CHAINCODE_LOGGING_LEVEL=DEBUG
       # cli peer specific setting
-      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/crypto/peer/msp
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/crypto/Admin@org1.example.com/msp
       - CORE_PEER_ID=cli
       - CORE_PEER_ADDRESS=peer0.org1.example.com:7051
       - CORE_PEER_LOCALMSPID=Org1MSP
@@ -110,13 +110,14 @@ services:
       # TLS settings
       - CORE_PEER_TLS_ENABLED=true
       - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/crypto/peer/tls/server.crt
-      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/crypto/peer/server.key
-      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/crypto/peer/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/crypto/peer/tls/ca.crt
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     volumes:
       - /var/run/:/host/var/run/
       - ./crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts:/opt/gopath/ordererca
       - ./crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/:/etc/hyperledger/crypto/peer
+      - ./crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp:/etc/hyperledger/crypto/Admin@org1.example.com/msp
       - ./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
       - ./scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts
       - $GOPATH/src/github.com/hlf-go/example-chaincodes:/opt/gopath/src/github.com/hyperledger/fabric/examples/chaincode/go
