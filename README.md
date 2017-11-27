@@ -1,6 +1,6 @@
 # Introduction
 
-These assets will be deprecated. In future, please refer to github.com/hyperledger/fabric-samples for example infrastructure.
+These assets will be deprecated. Please refer to https://github.com/hyperledger/fabric-samples for example infrastructure.
 
 # Disclaimers
 
