@@ -1,6 +1,8 @@
 # Introduction
 
-These assets will be deprecated. Please refer to https://github.com/hyperledger/fabric-samples for example infrastructure.
+These assets will be deprecated. Please refer to https://github.com/ibm-silvergate/netcomposer to help you create localised Fabric infrastructure.
+
+This repo is subject to removal after Jan 2018.
 
 # Disclaimers
 
