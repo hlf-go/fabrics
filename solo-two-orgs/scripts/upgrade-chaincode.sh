@@ -8,7 +8,6 @@ function usage(){
     echo "Mandatory:"
     echo "   -c <cc id>         A unique string identifier"
     echo "   -v <cc version>    A numeric number"
-    echo "   -p <cc package>    A name of folder containing chaincodes"
     echo "Optional:"
     echo "   -a <cc argment>   <cc argument> must be in the form [\"method\", \"method-arg-1\", \"method-arg-2\"]"
 }
@@ -18,16 +17,13 @@ if [ "$#" -eq "0" ]; then
     exit
 fi
 
-while getopts "a:c:p:v:" opt; do
+while getopts "a:c:v:" opt; do
   case $opt in
     a)
       CHAINCODE_CONSTRUCTOR=$OPTARG
       ;;
     c)
       CHAINCODEID=$OPTARG
-      ;;
-    p)
-      CCHAINCODE_PACKAGE=$OPTARG
       ;;
     v)
       CHAINCODE_VERSION=$OPTARG
@@ -48,11 +44,6 @@ if [ -z $CHAINCODE_CONSTRUCTOR ]; then
 fi
 
 if [[ ! -z $CHAINCODE_VERSION && ! -z $CHAINCODEID && ! -z $CCHAINCODE_PACKAGE ]]; then
-
-    path_to_chaincode="github.com/hyperledger/fabric/examples/chaincode/go/$CCHAINCODE_PACKAGE"
-    echo "INSTALLING chaincode $CHAINCODEID version $CHAINCODE_VERSION in $path_to_chaincode"
-    echo
-    peer chaincode install -n $CHAINCODEID -v $CHAINCODE_VERSION -p $path_to_chaincode --tls --cafile $ORDERER_CA
 
     echo "UPGRADING chaincode $CHAINCODEID to version $CHAINCODE_VERSION"
     echo "in $CHANNELNAME"
