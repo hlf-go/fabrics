@@ -53,11 +53,6 @@ if [[ ! -z $CHAINCODEID && ! -z $CHAINCODE_VERSION && ! -z $CCHAINCODE_PACKAGE ]
     echo
     peer chaincode install -n $CHAINCODEID -v $CHAINCODE_VERSION -p $path_to_chaincode --tls --cafile $ORDERER_CA
 
-    constructor="{\"Args\":$CHAINCODE_CONSTRUCTOR}"
-    echo "INSTANTIATING chaincode $CHAINCODEID version $CHAINCODE_VERSION in $CHANNELNAME"
-    echo "with constructor $constructor"
-    echo
-    peer chaincode instantiate -o orderer.test.com:7050 -C $CHANNELNAME -n $CHAINCODEID -v $CHAINCODE_VERSION -c $constructor  -P "OR ('Org1MSP.member')" --tls --cafile $ORDERER_CA
 else
     usage
 fi
