@@ -28,11 +28,11 @@ while getopts "a:c:v:" opt; do
       CHAINCODE_VERSION=$OPTARG
       ;;
     \?)
-      usage
+      echo "Invalid option: -$OPTARG"
       exit 1
       ;;
     :)
-      usage
+      echo "Option -$OPTARG requires an argument."
       exit 1
       ;;
   esac
@@ -42,7 +42,7 @@ if [ -z $CHAINCODE_CONSTRUCTOR ]; then
     CHAINCODE_CONSTRUCTOR="[]"
 fi
 
-if [[ ! -z $CHAINCODEID && ! -z $CHAINCODE_VERSION && ! -z $CCHAINCODE_PACKAGE ]]; then
+if [[ ! -z $CHAINCODEID && ! -z $CHAINCODE_VERSION ]]; then
 
     constructor="{\"Args\":$CHAINCODE_CONSTRUCTOR}"
     echo "INSTANTIATING chaincode $CHAINCODEID version $CHAINCODE_VERSION in $CHANNELNAME"

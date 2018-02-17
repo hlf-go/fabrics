@@ -43,7 +43,7 @@ if [ -z $CHAINCODE_CONSTRUCTOR ]; then
   CHAINCODE_CONSTRUCTOR="[]"
 fi
 
-if [[ ! -z $CHAINCODE_VERSION && ! -z $CHAINCODEID && ! -z $CCHAINCODE_PACKAGE ]]; then
+if [[ ! -z $CHAINCODE_VERSION && ! -z $CHAINCODEID ]]; then
 
     echo "UPGRADING chaincode $CHAINCODEID to version $CHAINCODE_VERSION"
     echo "in $CHANNELNAME"
