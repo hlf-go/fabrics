@@ -1,0 +1,34 @@
+{
+    "mspid": "Org2MSP",
+    "cas": [
+        {
+            "url": "https://localhost:7054",
+            "serverHostname": "ca.org1.test.com",
+            "tlsCAcert": "./crypto-config/peerOrganizations/org2.test.com/ca/ca.org2.test.com-cert.pem"
+        }
+    ],
+    "channels": [
+        {
+            "name": "mychannel",
+            "orderer": {
+                "url": "grpcs://localhost:7050",
+                "serverHostname": "orderer.test.com",
+                "tlsCAcert": "./crypto-config/ordererOrganizations/test.com/msp/tlscacerts/tlsca.test.com-cert.pem"
+            },
+            "peers": [
+                {
+                    "requests": "grpcs://localhost:7051",
+                    "events": "grpcs://localhost:7053",
+                    "serverHostname":"peer0.org1.test.com",
+                    "tlsCAcerts": "./crypto-config/peerOrganizations/org1.test.com/msp/tlscacerts/tlsca.org1.test.com-cert.pem"
+                },
+                {
+                    "requests": "grpcs://localhost:7061",
+                    "events": "grpcs://localhost:7063",
+                    "serverHostname": "peer1.org2.test.com",
+                    "tlsCAcerts": "./crypto-config/peerOrganizations/org2.test.com/msp/tlscacerts/tlsca.org2.test.com-cert.pem"
+                }
+            ]
+        }
+    ]
+}

@@ -5,12 +5,17 @@
 ARGS_NUMBER="$#"
 COMMAND="$1"
 
-usage_message="Useage: $0 install | instantiate | update "
+usage_message="Useage: $0 create | install | instantiate | update "
 
 if [ $ARGS_NUMBER -ne 1 ]; then
     echo $usage_message
     exit
 fi
+
+function createChannel(){
+    docker exec cli.peer0.org1.test.com /bin/bash -c '${PWD}/scripts/create-channel.sh'
+    docker exec cli.peer0.org2.test.com /bin/bash -c '${PWD}/scripts/join-channel.sh'
+}
 
 function installChaincode(){
     docker exec cli.peer0.org1.test.com /bin/bash -c '${PWD}/scripts/install-chaincode.sh -c mycc -v 1.0 -p minimalcc'
@@ -26,6 +31,9 @@ function updateChaincode(){
 }
 
 case $COMMAND in
+    "create")
+        createChannel
+        ;;
     "install")
         installChaincode
         ;;

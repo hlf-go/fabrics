@@ -205,3 +205,11 @@ services:
       depends_on:
         - peer0.org2.test.com
 
+  network.config:
+    container_name: network.config
+    image: paul-sitoh/fabric-config
+    working_dir: /usr/src/app
+    ports:
+      - 9000:8080
+    volumes:
+      - ./crypto-config:/usr/src/app/crypto-config

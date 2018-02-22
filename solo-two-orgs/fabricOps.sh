@@ -34,6 +34,10 @@ function pullDockerImages(){
   done
 }
 
+function buildNetworkConfig(){
+    docker build -t paul-sitoh/fabric-config ./network-config
+}
+
 function generateCerts(){
 
     if [ ! -f $GOPATH/bin/cryptogen ]; then
@@ -90,13 +94,6 @@ function startNetwork() {
     echo "----------------------------"
     cd $PROJECT_DIR
     docker-compose up -d
-
-    echo
-    echo "----------------------------"
-    echo "--- Initialising network ---"
-    echo "----------------------------"
-    docker exec cli.peer0.org1.test.com /bin/bash -c '${PWD}/scripts/create-channel.sh'
-    docker exec cli.peer0.org2.test.com /bin/bash -c '${PWD}/scripts/join-channel.sh'
 }
 
 function cleanNetwork() {
@@ -141,6 +138,7 @@ case $COMMAND in
     "start")
         generateCerts
         generateChannelArtifacts
+        buildNetworkConfig
         pullDockerImages
         startNetwork
         ;;

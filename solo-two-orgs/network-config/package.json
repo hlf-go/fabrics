@@ -1,0 +1,19 @@
+{
+  "name": "network-config",
+  "version": "1.0.0",
+  "description": "Network config",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/hlf-go/fabrics.git"
+  },
+  "author": "Paul Sitoh",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "express": "4.16.2",
+    "fs-extra": "5.0.0"
+  }
+}
