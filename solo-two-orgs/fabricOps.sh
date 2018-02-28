@@ -41,7 +41,10 @@ function buildNetworkConfig(){
 function generateCerts(){
 
     if [ ! -f $GOPATH/bin/cryptogen ]; then
-        go get github.com/hyperledger/fabric/common/tools/cryptogen
+        pushd $GOPATH/src/github.com/hyperledger/fabric
+        make cryptogen
+        cp ./build/bin/cryptogen $GOPATH/bin
+        popd    
     fi
     
     echo
@@ -68,7 +71,10 @@ function generateChannelArtifacts(){
 	fi
 
 	if [ ! -f $GOPATH/bin/configtxgen ]; then
-        go get github.com/hyperledger/fabric/common/configtx/tool/configtxgen
+        pushd $GOPATH/src/github.com/hyperledger/fabric
+        make configtxgen
+        cp ./build/bin/configtxgen $GOPATH/bin
+        popd
     fi
 
     echo
