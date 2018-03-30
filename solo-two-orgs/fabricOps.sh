@@ -64,6 +64,20 @@ function networkRestart(){
     docker-compose up -d
 }
 
+function replacePrivateKey () {
+
+    pushd crypto-config/peerOrganizations/org1.test.com/ca/
+    PRIV_KEY=$(ls *_sk)
+    mv $PRIV_KEY secret.key 
+    popd
+
+    pushd crypto-config/peerOrganizations/org2.test.com/ca/
+    PRIV_KEY=$(ls *_sk)
+    mv $PRIV_KEY secret.key
+    popd
+    
+}
+
 function generateChannelArtifacts(){
 
     if [ ! -d ./channel-artifacts ]; then
