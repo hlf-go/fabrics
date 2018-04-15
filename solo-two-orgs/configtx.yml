@@ -48,7 +48,7 @@ Organizations:
         ID: OrdererMSP
 
         # MSPDir is the filesystem path which contains the MSP configuration
-        MSPDir: crypto-config/ordererOrganizations/test.com/msp
+        MSPDir: crypto-config/ordererOrganizations/fabric.network/msp
 
         # turn off security for the channel
         AdminPrincipal: Role.MEMBER
@@ -61,7 +61,7 @@ Organizations:
         # ID to load the MSP definition as
         ID: Org1MSP
 
-        MSPDir: crypto-config/peerOrganizations/org1.test.com/msp
+        MSPDir: crypto-config/peerOrganizations/org1.fabric.network/msp
 
         # turn off security for the peer
         AdminPrincipal: Role.MEMBER
@@ -81,7 +81,7 @@ Organizations:
         # ID to load the MSP definition as
         ID: Org2MSP
 
-        MSPDir: crypto-config/peerOrganizations/org2.test.com/msp
+        MSPDir: crypto-config/peerOrganizations/org2.fabric.network/msp
 
         # turn off security for the peer
         AdminPrincipal: Role.MEMBER
@@ -90,7 +90,7 @@ Organizations:
             # AnchorPeers defines the location of peers which can be used
             # for cross org gossip communication.  Note, this value is only
             # encoded in the genesis block in the Application section context
-            - Host: peer0.org2.test.com
+            - Host: peer0.org2.fabric.network
               Port: 7051
 
 ################################################################################
@@ -108,7 +108,7 @@ Orderer: &OrdererDefaults
     OrdererType: solo
 
     Addresses:
-        - orderer.test.com:7050
+        - orderer.fabric.network:7050
 
     # Batch Timeout: The amount of time to wait before creating a batch
     BatchTimeout: 2s

@@ -2,8 +2,8 @@ version: '2'
 
 services:
 
-  orderer.test.com:
-    container_name: orderer.test.com
+  orderer.fabric.network:
+    container_name: orderer.fabric.network
     image: hyperledger/fabric-orderer
     tty: true
     environment:
@@ -23,41 +23,41 @@ services:
       - ORDERER_GENERAL_TLS_ENABLED=true
       - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/fabric/crypto-config/tls/server.crt
       - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/fabric/crypto-config/tls/server.key
-      - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/fabric/crypto-config/tls/ca.crt, /var/hyperledger/fabric/crypto-config/peerOrganizations/org1.test.com/tls/ca.crt, /var/hyperledger/fabric/crypto-config/peerOrganizations/org2.test.com/tls/ca.crt]
+      - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/fabric/crypto-config/tls/ca.crt, /var/hyperledger/fabric/crypto-config/peerOrganizations/org1.fabric.network/tls/ca.crt, /var/hyperledger/fabric/crypto-config/peerOrganizations/org2.fabric.network/tls/ca.crt]
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
     command: orderer
     volumes:
       - ./channel-artifacts/:/var/hyperledger/fabric/crypto-config/genesis/
-      - ./crypto-config/ordererOrganizations/test.com/orderers/orderer.test.com/:/var/hyperledger/fabric/crypto-config/
-      - ./crypto-config/peerOrganizations/org1.test.com/peers/peer0.org1.test.com/tls/ca.crt:/var/hyperledger/fabric/crypto-config/peerOrganizations/org1.test.com/tls/ca.crt
-      - ./crypto-config/peerOrganizations/org2.test.com/peers/peer0.org2.test.com/tls/ca.crt:/var/hyperledger/fabric/crypto-config/peerOrganizations/org2.test.com/tls/ca.crt
+      - ./crypto-config/ordererOrganizations/fabric.network/orderers/orderer.fabric.network/:/var/hyperledger/fabric/crypto-config/
+      - ./crypto-config/peerOrganizations/org1.fabric.network/peers/peer0.org1.fabric.network/tls/ca.crt:/var/hyperledger/fabric/crypto-config/peerOrganizations/org1.fabric.network/tls/ca.crt
+      - ./crypto-config/peerOrganizations/org2.fabric.network/peers/peer0.org2.fabric.network/tls/ca.crt:/var/hyperledger/fabric/crypto-config/peerOrganizations/org2.fabric.network/tls/ca.crt
     ports:
       - 7050:7050
 
-  ca.org1.test.com:
-    container_name: ca.org1.test.com
+  ca.org1.fabric.network:
+    container_name: ca.org1.fabric.network
     image: hyperledger/fabric-ca
     environment:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
-      - FABRIC_CA_SERVER_CA_NAME=ca.org1.test.com
-      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server/crypto-config/ca/ca.org1.test.com-cert.pem
+      - FABRIC_CA_SERVER_CA_NAME=ca.org1.fabric.network
+      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server/crypto-config/ca/ca.org1.fabric.network-cert.pem
       - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server/crypto-config/ca/secret.key
       - FABRIC_CA_SERVER_TLS_ENABLED=true
-      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server/crypto-config/ca/ca.org1.test.com-cert.pem
+      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server/crypto-config/ca/ca.org1.fabric.network-cert.pem
       - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server/crypto-config/ca/secret.key
     command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
     volumes:
-      - ./crypto-config/peerOrganizations/org1.test.com/ca/:/etc/hyperledger/fabric-ca-server/crypto-config/ca/
+      - ./crypto-config/peerOrganizations/org1.fabric.network/ca/:/etc/hyperledger/fabric-ca-server/crypto-config/ca/
     ports:
       - 7054:7054
 
-  peer0.org1.test.com:
-    container_name: peer0.org1.test.com
+  peer0.org1.fabric.network:
+    container_name: peer0.org1.fabric.network
     image: hyperledger/fabric-peer
     tty: true
     environment:
-      - CORE_PEER_ID=peer0.org1.test.com
-      - CORE_PEER_ADDRESS=peer0.org1.test.com:7051
+      - CORE_PEER_ID=peer0.org1.fabric.network
+      - CORE_PEER_ADDRESS=peer0.org1.fabric.network:7051
       - CORE_PEER_LOCALMSPID=Org1MSP
       - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/crypto-config/msp
       - CORE_PEER_TLS_ENABLED=true
@@ -65,7 +65,7 @@ services:
       - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/crypto-config/tls/server.key
       - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/crypto-config/tls/ca.crt
       - CORE_PEER_ENDORSER_ENABLED=true
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org1.test.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org1.fabric.network:7051
       - CORE_PEER_GOSSIP_USELEADERELECTION=true
       - CORE_PEER_GOSSIP_ORGLEADER=false
       # This disables mutual auth for gossip
@@ -82,67 +82,67 @@ services:
              /bin/bash
     volumes:
       - /var/run/:/host/var/run/
-      - ./crypto-config/peerOrganizations/org1.test.com/peers/peer0.org1.test.com/:/etc/hyperledger/fabric/crypto-config/
+      - ./crypto-config/peerOrganizations/org1.fabric.network/peers/peer0.org1.fabric.network/:/etc/hyperledger/fabric/crypto-config/
     ports:
       - 7051:7051
       - 7053:7053
     depends_on: 
-      - orderer.test.com 
+      - orderer.fabric.network 
 
-  cli.peer0.org1.test.com:
-      container_name: cli.peer0.org1.test.com
+  cli.peer0.org1.fabric.network:
+      container_name: cli.peer0.org1.fabric.network
       image: hyperledger/fabric-tools
       tty: true
       environment:
         - GOPATH=/opt/gopath
         - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
         - CORE_LOGGING_LEVEL=debug
-        - CORE_PEER_ID=peer0.org1.test.com
-        - CORE_PEER_ADDRESS=peer0.org1.test.com:7051
+        - CORE_PEER_ID=peer0.org1.fabric.network
+        - CORE_PEER_ADDRESS=peer0.org1.fabric.network:7051
         - CORE_PEER_LOCALMSPID=Org1MSP
         - CORE_PEER_TLS_ENABLED=true
         - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/crypto-config/tls/server.crt
         - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/crypto-config/tls/server.key
         - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/crypto-config/tls/ca.crt
-        - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/crypto-config/users/Admin@org1.test.com/msp
-        - ORDERER_CA=/etc/hyperledger/fabric/crypto-config/orderer/msp/tlscacerts/tlsca.test.com-cert.pem
+        - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/crypto-config/users/Admin@org1.fabric.network/msp
+        - ORDERER_CA=/etc/hyperledger/fabric/crypto-config/orderer/msp/tlscacerts/tlsca.fabric.network-cert.pem
       working_dir: /opt/gopath/src/github.com/hyperledger/fabric
       command: /bin/bash
       volumes:
         - /var/run/:/host/var/run/
-        - ./crypto-config/peerOrganizations/org1.test.com/peers/peer0.org1.test.com/:/etc/hyperledger/fabric/crypto-config/
-        - ./crypto-config/peerOrganizations/org1.test.com/users/:/etc/hyperledger/fabric/crypto-config/users/
-        - ./crypto-config/ordererOrganizations/test.com/orderers/orderer.test.com/:/etc/hyperledger/fabric/crypto-config/orderer/
+        - ./crypto-config/peerOrganizations/org1.fabric.network/peers/peer0.org1.fabric.network/:/etc/hyperledger/fabric/crypto-config/
+        - ./crypto-config/peerOrganizations/org1.fabric.network/users/:/etc/hyperledger/fabric/crypto-config/users/
+        - ./crypto-config/ordererOrganizations/fabric.network/orderers/orderer.fabric.network/:/etc/hyperledger/fabric/crypto-config/orderer/
         - ./channel-artifacts/:/opt/gopath/src/github.com/hyperledger/fabric/channel-artifacts/        
         - ./scripts:/opt/gopath/src/github.com/hyperledger/fabric/scripts
         - $GOPATH/src/github.com/hlf-go/example-chaincodes/:/opt/gopath/src/github.com/hyperledger/fabric/chaincodes/
       depends_on:
-        - peer0.org1.test.com
+        - peer0.org1.fabric.network
 
-  ca.org2.test.com:
-    container_name: ca.org2.test.com
+  ca.org2.fabric.network:
+    container_name: ca.org2.fabric.network
     image: hyperledger/fabric-ca
     environment:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
-      - FABRIC_CA_SERVER_CA_NAME=ca.org2.test.com
-      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server/crypto-config/ca/ca.org2.test.com-cert.pem
+      - FABRIC_CA_SERVER_CA_NAME=ca.org2.fabric.network
+      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server/crypto-config/ca/ca.org2.fabric.network-cert.pem
       - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server/crypto-config/ca/secret.key
       - FABRIC_CA_SERVER_TLS_ENABLED=true
-      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server/crypto-config/ca/ca.org2.test.com-cert.pem
+      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server/crypto-config/ca/ca.org2.fabric.network-cert.pem
       - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server/crypto-config/ca/secret.key
     command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
     volumes:
-      - ./crypto-config/peerOrganizations/org2.test.com/ca/:/etc/hyperledger/fabric-ca-server/crypto-config/ca/
+      - ./crypto-config/peerOrganizations/org2.fabric.network/ca/:/etc/hyperledger/fabric-ca-server/crypto-config/ca/
     ports:
       - 7154:7054
 
-  peer0.org2.test.com:
-    container_name: peer0.org2.test.com
+  peer0.org2.fabric.network:
+    container_name: peer0.org2.fabric.network
     image: hyperledger/fabric-peer
     tty: true
     environment:
-        - CORE_PEER_ID=peer0.org2.test.com
-        - CORE_PEER_ADDRESS=peer0.org2.test.com:7051
+        - CORE_PEER_ID=peer0.org2.fabric.network
+        - CORE_PEER_ADDRESS=peer0.org2.fabric.network:7051
         - CORE_PEER_LOCALMSPID=Org2MSP
         - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/crypto-config/msp
         - CORE_PEER_TLS_ENABLED=true
@@ -150,8 +150,8 @@ services:
         - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/crypto-config/tls/server.key
         - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/crypto-config/tls/ca.crt
         - CORE_PEER_ENDORSER_ENABLED=true
-        - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org2.test.com:7051
-        - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.org2.test.com:7051
+        - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org2.fabric.network:7051
+        - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.org2.fabric.network:7051
         - CORE_PEER_GOSSIP_USELEADERELECTION=true
         - CORE_PEER_GOSSIP_ORGLEADER=false
         # This disables mutual auth for gossip
@@ -168,42 +168,42 @@ services:
              /bin/bash
     volumes:
         - /var/run/:/host/var/run/
-        - ./crypto-config/peerOrganizations/org2.test.com/peers/peer0.org2.test.com/:/etc/hyperledger/fabric/crypto-config/
+        - ./crypto-config/peerOrganizations/org2.fabric.network/peers/peer0.org2.fabric.network/:/etc/hyperledger/fabric/crypto-config/
     ports:
       - 7061:7051
       - 7063:7053
     depends_on: 
-      - orderer.test.com 
+      - orderer.fabric.network 
 
-  cli.peer0.org2.test.com:
-      container_name: cli.peer0.org2.test.com
+  cli.peer0.org2.fabric.network:
+      container_name: cli.peer0.org2.fabric.network
       image: hyperledger/fabric-tools
       tty: true
       environment:
         - GOPATH=/opt/gopath
         - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
         - CORE_LOGGING_LEVEL=debug
-        - CORE_PEER_ID=peer0.org2.test.com
-        - CORE_PEER_ADDRESS=peer0.org2.test.com:7051
+        - CORE_PEER_ID=peer0.org2.fabric.network
+        - CORE_PEER_ADDRESS=peer0.org2.fabric.network:7051
         - CORE_PEER_LOCALMSPID=Org2MSP
         - CORE_PEER_TLS_ENABLED=true
         - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/crypto-config/tls/server.crt
         - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/crypto-config/tls/server.key
         - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/crypto-config/tls/ca.crt
-        - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/crypto-config/users/Admin@org2.test.com/msp
-        - ORDERER_CA=/etc/hyperledger/fabric/crypto-config/orderer/msp/tlscacerts/tlsca.test.com-cert.pem
+        - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/crypto-config/users/Admin@org2.fabric.network/msp
+        - ORDERER_CA=/etc/hyperledger/fabric/crypto-config/orderer/msp/tlscacerts/tlsca.fabric.network-cert.pem
       working_dir: /opt/gopath/src/github.com/hyperledger/fabric
       command: /bin/bash
       volumes:
         - /var/run/:/host/var/run/
-        - ./crypto-config/peerOrganizations/org2.test.com/peers/peer0.org2.test.com/:/etc/hyperledger/fabric/crypto-config/
-        - ./crypto-config/peerOrganizations/org2.test.com/users/:/etc/hyperledger/fabric/crypto-config/users/
-        - ./crypto-config/ordererOrganizations/test.com/orderers/orderer.test.com/:/etc/hyperledger/fabric/crypto-config/orderer/
+        - ./crypto-config/peerOrganizations/org2.fabric.network/peers/peer0.org2.fabric.network/:/etc/hyperledger/fabric/crypto-config/
+        - ./crypto-config/peerOrganizations/org2.fabric.network/users/:/etc/hyperledger/fabric/crypto-config/users/
+        - ./crypto-config/ordererOrganizations/fabric.network/orderers/orderer.fabric.network/:/etc/hyperledger/fabric/crypto-config/orderer/
         - ./channel-artifacts/:/opt/gopath/src/github.com/hyperledger/fabric/channel-artifacts/
         - ./scripts:/opt/gopath/src/github.com/hyperledger/fabric/scripts
         - $GOPATH/src/github.com/hlf-go/example-chaincodes/:/opt/gopath/src/github.com/hyperledger/fabric/chaincodes/
       depends_on:
-        - peer0.org2.test.com
+        - peer0.org2.fabric.network
 
   network.config:
     container_name: network.config

@@ -50,7 +50,7 @@ if [[ ! -z $CHAINCODE_VERSION && ! -z $CHAINCODEID ]]; then
     echo "with constructor $CHAINCODE_CONSTRUCTOR"
     constructor="{\"Args\":$CHAINCODE_CONSTRUCTOR}"
 
-    peer chaincode upgrade -o orderer.example.com:7050 -C $CHANNELNAME -n $CHAINCODEID -v $CHAINCODE_VERSION -c $constructor --tls --cafile $ORDERER_CA
+    peer chaincode upgrade -o $ORDERER -C $CHANNELNAME -n $CHAINCODEID -v $CHAINCODE_VERSION -c $constructor --tls --cafile $ORDERER_CA
 else
   usage
 fi

@@ -42,7 +42,7 @@ if [ ! -z $CHAINCODEID ]; then
   echo "INVOKING chaincode $CHAINCODEID in $CHANNELNAME"
   constructor="{\"Args\":$CHAINCODE_CONSTRUCTOR}"
   echo "with constructor $constructor"
-  peer chaincode invoke -o orderer.example.com:7050 -C $CHANNELNAME -n $CHAINCODEID -c $constructor
+  peer chaincode invoke -o $ORDERER -C $CHANNELNAME -n $CHAINCODEID -c $constructor
 else
   usage
 fi 

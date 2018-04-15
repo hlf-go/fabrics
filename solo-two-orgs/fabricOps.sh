@@ -2,12 +2,10 @@
 
 . ./scripts/common.sh
 
-PROJECT_DIR=$PWD
-
 ARGS_NUMBER="$#"
 COMMAND="$1"
 
-usage_message="Useage: $0 start | restart | clean "
+usage_message="Useage: $0 start | restart | clean | status"
 
 function verifyArg() {
     if [ $ARGS_NUMBER -ne 1 ]; then
@@ -22,6 +20,11 @@ function verifyGOPATH(){
         echo "Please set GOPATH"
         exit 1
     fi
+
+    if [ ! -d $GOPATH/bin ]; then
+        mkdir $GOPATH/bin
+    fi
+
 }
 
 function pullDockerImages(){
@@ -43,7 +46,7 @@ function generateCerts(){
     if [ ! -f $GOPATH/bin/cryptogen ]; then
         pushd $GOPATH/src/github.com/hyperledger/fabric
         make cryptogen
-        cp ./build/bin/cryptogen $GOPATH/bin
+        cp ./build/bin/cryptogen $GOPATH/bin/cryptogen
         popd    
     fi
     
@@ -64,20 +67,6 @@ function networkRestart(){
     docker-compose up -d
 }
 
-function replacePrivateKey () {
-
-    pushd crypto-config/peerOrganizations/org1.test.com/ca/
-    PRIV_KEY=$(ls *_sk)
-    mv $PRIV_KEY secret.key 
-    popd
-
-    pushd crypto-config/peerOrganizations/org2.test.com/ca/
-    PRIV_KEY=$(ls *_sk)
-    mv $PRIV_KEY secret.key
-    popd
-    
-}
-
 function generateChannelArtifacts(){
 
     if [ ! -d ./channel-artifacts ]; then
@@ -87,7 +76,7 @@ function generateChannelArtifacts(){
 	if [ ! -f $GOPATH/bin/configtxgen ]; then
         pushd $GOPATH/src/github.com/hyperledger/fabric
         make configtxgen
-        cp ./build/bin/configtxgen $GOPATH/bin
+        cp ./build/bin/configtxgen $GOPATH/bin/configtxgen
         popd
     fi
 
@@ -112,23 +101,25 @@ function startNetwork() {
     echo "----------------------------"
     echo "--- Starting the network ---"
     echo "----------------------------"
-    cd $PROJECT_DIR
     docker-compose up -d
 }
 
 function cleanNetwork() {
-    cd $PROJECT_DIR
     
     if [ -d ./channel-artifacts ]; then
-            rm -rf ./channel-artifacts
+        rm -rf ./channel-artifacts
     fi
 
     if [ -d ./crypto-config ]; then
-            rm -rf ./crypto-config
+        PLATFORM=`uname -s`
+        if [ "$PLATFORM" != "Darwin" ]; then
+            sudo chown -R $USER:$USER ./crypto-config
+        fi
+        rm -rf ./crypto-config
     fi
 
     if [ -d ./tools ]; then
-            rm -rf ./tools
+        rm -rf ./tools
     fi
 
     # This operations removes all docker containers and images regardless
@@ -150,20 +141,49 @@ function downloadExampleChaincodes(){
     fi
 }
 
+function getFabricSourceCode(){
+    if [ ! -d $GOPATH/src/github.com/hyperledger/fabric ]; then
+        go get github.com/hyperledger/fabric
+    fi
+}
+
+function createSecretPrivKeys(){
+
+    pushd ./crypto-config/peerOrganizations/org1.fabric.network/ca
+    PK=$(ls *_sk)
+    mv $PK secret.key
+    popd
+
+    pushd ./crypto-config/peerOrganizations/org2.fabric.network/ca
+    PK=$(ls *_sk)
+    mv $PK secret.key
+    popd
+
+}
+
+function networkStatus(){
+    docker ps --format "table {{.Names}}\t{{.Status}}" --filter "name=fabric.network"
+}
+
 # Network operations
 verifyArg
 verifyGOPATH
+getFabricSourceCode
 downloadExampleChaincodes
 case $COMMAND in
     "start")
         generateCerts
         generateChannelArtifacts
+        createSecretPrivKeys
         buildNetworkConfig
         pullDockerImages
         startNetwork
         ;;
     "restart")
         networkRestart
+        ;;
+    "status")
+        networkStatus
         ;;
     "clean")
         cleanNetwork

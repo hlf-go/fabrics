@@ -48,7 +48,7 @@ if [[ ! -z $CHAINCODEID && ! -z $CHAINCODE_VERSION ]]; then
     echo "INSTANTIATING chaincode $CHAINCODEID version $CHAINCODE_VERSION in $CHANNELNAME"
     echo "with constructor $constructor"
     echo
-    peer chaincode instantiate -o orderer.test.com:7050 -C $CHANNELNAME -n $CHAINCODEID -v $CHAINCODE_VERSION -c $constructor  -P "OR ('Org1MSP.member')" --tls --cafile $ORDERER_CA
+    peer chaincode instantiate -o $ORDERER -C $CHANNELNAME -n $CHAINCODEID -v $CHAINCODE_VERSION -c $constructor  -P "OR ('Org1MSP.member')" --tls --cafile $ORDERER_CA
 else
     usage
 fi
